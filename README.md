@@ -34,7 +34,7 @@ To get a local copy up and running follow these simple steps:
 #### For Docker
 1. Pull docker container
 ```sh
-docker pull sirvius2122/geolocationapi
+docker pull sirvius2122/stockAPI
 ```
 2. Run container
 ```sh
@@ -44,15 +44,15 @@ docker exec -it <container name> <command>
 #### For Local
 1. Clone the repo
 ```sh
-git clone https://github.com/lukaszszafranski/GeoAPI.git
+git clone https://github.com/lukaszszafranski/StockExchange.git
 ```
 
 #### For Azure
 1. Go to
 ```sh
-https://geolocationapitest.azurewebsites.net/api/Geolocation
+https://stockAPI.azurewebsites.net/api/Stock
 ```
 
 <!-- USAGE EXAMPLES -->
 ## Usage
-For usage examples please refer to the [Documentation](https://app.swaggerhub.com/apis-docs/lukaszszafranski/GeoAPI/v1)
+For usage examples please refer to the [Documentation](https://app.swaggerhub.com/apis-docs/lukaszszafranski/StockAPI/v1)

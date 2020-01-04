@@ -1,4 +1,4 @@
-<h1>GeoAPI</h1>
+<h1>StockAPI</h1>
 
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents

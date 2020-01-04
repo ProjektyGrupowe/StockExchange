@@ -44,7 +44,7 @@ docker exec -it <container name> <command>
 #### For Local
 1. Clone the repo
 ```sh
-git clone https://github.com/lukaszszafranski/StockExchange.git
+git clone https://github.com/ProjektyGrupowe/StockExchange.git
 ```
 
 #### For Azure

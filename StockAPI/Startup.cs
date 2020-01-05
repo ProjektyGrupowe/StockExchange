@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StockAPI.Data;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
@@ -102,7 +103,7 @@ namespace StockAPI
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "GeoAPI", Version = "v1" });
+                c.SwaggerDoc("v1", new Info { Title = "StockAPI", Version = "v1" });
             });
         }
 
@@ -134,7 +135,7 @@ namespace StockAPI
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "GeoAPI V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "StockAPI V1");
             });
 
             app.UseCors(x => x

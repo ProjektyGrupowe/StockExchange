@@ -1,4 +1,4 @@
-﻿using StockAPI.Entities;
+﻿using StockAPI.Models.UserModels;
 using System.Collections.Generic;
 
 namespace StockAPI.Repositories

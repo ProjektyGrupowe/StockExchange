@@ -46,12 +46,22 @@ namespace WebApiTests.Fakers
             };
         }
 
+        public int CountOfStockData()
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<StockResponse> DeleteAsync(string Symbol)
         {
             var existingStockData = _stockDatas.First(g => g.Quote.Symbol == Symbol || g.Quote.CompanyName.Contains(Symbol));
             _stockDatas.Remove(existingStockData);
 
             return await Task.Run(() => new StockResponse(existingStockData));
+        }
+
+        public Task<StockData> FindBySymbolAsync(string Symbol)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<StockData> FindBySymbolOrCompanyNameAsync(string Symbol)

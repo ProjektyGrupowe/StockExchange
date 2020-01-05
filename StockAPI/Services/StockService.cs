@@ -1,4 +1,5 @@
 ﻿using StockAPI.Models;
+using StockAPI.Models.ApiDataModels;
 using StockAPI.Repositories;
 using StockAPI.Repositories.Domain;
 using StockAPI.Resources;
@@ -38,7 +39,7 @@ namespace StockAPI.Services
                 return new StockResponse($"An error occurred when saving the category: {ex.Message}");
             }
         }
-        public async Task<StockData> FindBySymbolOrCompanyNameAsync(string Symbol)
+        public async Task<StockData> FindBySymbolAsync(string Symbol)
         {
             return await _stockRepository.FindBySymbolAsync(Symbol);
         }
@@ -70,6 +71,11 @@ namespace StockAPI.Services
         public bool SpecificStockDataExists(string Symbol)
         {
             return _stockRepository.SpecificStockDataExists(Symbol);
+        }
+
+        public int CountOfStockData()
+        {
+            return _stockRepository.CountOfStockData();
         }
     }
 }

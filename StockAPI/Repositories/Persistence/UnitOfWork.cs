@@ -1,4 +1,4 @@
-﻿using StockAPI.Models;
+﻿using StockAPI.Data;
 using StockAPI.Repositories.Domain;
 using System;
 using System.Collections.Generic;

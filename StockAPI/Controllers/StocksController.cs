@@ -11,6 +11,8 @@ using Microsoft.EntityFrameworkCore.Internal;
 using StockAPI.Services;
 using AutoMapper;
 using StockAPI.Resources;
+using StockAPI.Models.ApiDataModels;
+using StockAPI.Models.PostDataModels;
 using System.Net;
 
 namespace StockAPI.Controllers
@@ -28,9 +30,9 @@ namespace StockAPI.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/Geolocation
+        // GET: api/Stocks
         [HttpGet]
-        public async Task<IEnumerable<StockResource>> GetStockData()
+        public async Task<IEnumerable<StockResource>> GetStockQuoteData()
         {
             var stockDatas = await _stockService.ListAsync();
             var resources = _mapper.Map<IEnumerable<StockData>, IEnumerable<StockResource>>(stockDatas);
@@ -38,26 +40,31 @@ namespace StockAPI.Controllers
             return resources;
         }
 
-        // GET: api/Geolocation/5
-        [HttpGet("{symbol}")]
-        public async Task<IActionResult> GetStockData([FromRoute] PostData postData)
+        /// <summary>
+        /// Get Stock Quote
+        /// </summary>
+        /// <param name="Symbol"></param>
+        /// <returns></returns>
+        // GET: api/Stocks/Symbol
+        [HttpGet("{Symbol}")]
+        public async Task<IActionResult> GetStockQuoteData(string Symbol)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState.Values.SelectMany(m => m.Errors).Select(m => m.ErrorMessage).ToList());
             }
 
-            var geolocationData = await _stockService.FindBySymbolOrCompanyNameAsync(postData.Symbols);
+            var stockData = await _stockService.FindBySymbolAsync(Symbol);
 
-            if (!_stockService.SpecificStockDataExists(postData.Symbols))
+            if (!_stockService.SpecificStockDataExists(Symbol))
             {
                 return NotFound();
             }
 
-            return Ok(geolocationData);
+            return Ok(stockData);
         }
 
-        // POST: api/Geolocation
+        // POST: api/Stocks
         [HttpPost]
         public async Task<IActionResult> PostStockData([FromBody] PostData postData)
         {
@@ -71,8 +78,8 @@ namespace StockAPI.Controllers
             if (symbolList.Count == 1)
             {
                 var httpClient = new HttpClient();
-                var URL = "https://cloud.iexapis.com/v1/stock/market/batch?symbols=" + postData.Symbols + "&types=" + postData.Types + "&range=" + postData.Range;
-                var Token = "?token=pk_8936f153936f4ee3b77122727d80bead";
+                var URL = "https://cloud.iexapis.com/v1/stock/" + postData.Symbols + "/batch?" + "&types=quote,chart&range=1m&last=5";
+                var Token = "&token=pk_8936f153936f4ee3b77122727d80bead";
 
                 var response = await httpClient.GetStringAsync(URL + Token);
                 var stockResource = Newtonsoft.Json.JsonConvert.DeserializeObject<SaveStockResource>(response);
@@ -87,9 +94,9 @@ namespace StockAPI.Controllers
                         return BadRequest(result.Result.Message);
                     }
 
-                    var finalGeolocationResource = _mapper.Map<StockData, StockResource>(result.Result.StockData);
+                    var finalStockResource = _mapper.Map<StockData, StockResource>(result.Result.StockData);
 
-                    return Ok(finalGeolocationResource);
+                    return Ok(finalStockResource);
                 }
                 else
                 {
@@ -106,7 +113,7 @@ namespace StockAPI.Controllers
                     if (!_stockService.SpecificStockDataExists(symbol))
                     {
                         var httpClient = new HttpClient();
-                        var URL = "https://cloud.iexapis.com/v1/stock/market/batch?symbols=" + symbol + "&types=" + postData.Types + "&range=" + postData.Range;
+                        var URL = "https://cloud.iexapis.com/v1/stock/" + postData.Symbols + "/batch?" + "&types=quote,chart&range=1m&last=5";
                         var Token = "?token=pk_8936f153936f4ee3b77122727d80bead";
 
                         var response = await httpClient.GetStringAsync(URL + Token);
@@ -139,16 +146,16 @@ namespace StockAPI.Controllers
             return Ok();
         }
 
-        // DELETE: api/Geolocation/ip
+        // DELETE: api/Stocks/symbol
         [HttpDelete("{symbol}")]
-        public async Task<IActionResult> DeleteStockData([FromRoute] PostData postData)
+        public async Task<IActionResult> DeleteStockData(string Symbol)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState.Values.SelectMany(m => m.Errors).Select(m => m.ErrorMessage).ToList());
             }
 
-            var result = await _stockService.DeleteAsync(postData.Symbols);
+            var result = await _stockService.DeleteAsync(Symbol);
 
             if (!result.Success)
             {

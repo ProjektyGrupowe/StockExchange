@@ -1,4 +1,5 @@
-﻿using StockAPI.Models;
+﻿using StockAPI.Models.ApiDataModels;
+using StockAPI.Data;
 using StockAPI.Repositories.Persistence;
 using System;
 using System.Collections.Generic;
@@ -21,9 +22,21 @@ namespace StockAPI.Repositories
         {
             await _context.StockData.AddAsync(stockData);
         }
-        public async Task<StockData> FindBySymbolAsync(string IP)
+
+        public async Task<StockData> FindBySymbolAsync(string Symbol)
         {
-            return await _context.StockData.FindAsync(IP);
+            var ID = _context.StockData.Select(s => s.ID).Single();
+            var quote = _context.Quote.First(s => s.Symbol == Symbol);
+            var chart = _context.Chart.Where(s => s.StockDataID == ID).ToList();
+
+            var stockData = new StockData
+            {
+                ID = ID,
+                Quote = quote,
+                Chart = chart,
+            };
+
+            return await Task.Run(() => stockData);
         }
 
         public void Remove(StockData stockData)
@@ -39,6 +52,11 @@ namespace StockAPI.Repositories
         public bool SpecificStockDataExists(string Symbol)
         {
             return _context.StockData.Any(e => e.Quote.Symbol == Symbol || e.Quote.CompanyName.Contains(Symbol));
+        }
+
+        public int CountOfStockData()
+        {
+            return _context.StockData.ToList().Count();
         }
     }
 }

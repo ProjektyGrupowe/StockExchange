@@ -1,6 +1,6 @@
-﻿using StockAPI.Entities;
-using StockAPI.Helpers;
-using StockAPI.Models;
+﻿using StockAPI.Helpers;
+using StockAPI.Models.UserModels;
+using StockAPI.Data;
 using StockAPI.Repositories.Persistence;
 using System;
 using System.Collections.Generic;

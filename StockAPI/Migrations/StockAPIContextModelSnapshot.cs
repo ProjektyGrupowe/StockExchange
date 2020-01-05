@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using StockAPI.Models;
+using StockAPI.Data;
 
 namespace StockAPI.Migrations
 {
@@ -19,30 +19,11 @@ namespace StockAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("StockAPI.Entities.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("FirstName");
-
-                    b.Property<string>("LastName");
-
-                    b.Property<byte[]>("PasswordHash");
-
-                    b.Property<byte[]>("PasswordSalt");
-
-                    b.Property<string>("Username");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
-                });
-
             modelBuilder.Entity("StockAPI.Models.Chart", b =>
                 {
-                    b.Property<DateTimeOffset?>("Date");
+                    b.Property<int>("ChartID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<double?>("Change");
 
@@ -52,6 +33,8 @@ namespace StockAPI.Migrations
 
                     b.Property<double?>("Close");
 
+                    b.Property<DateTimeOffset?>("Date");
+
                     b.Property<double?>("High");
 
                     b.Property<string>("Label");
@@ -60,7 +43,7 @@ namespace StockAPI.Migrations
 
                     b.Property<double?>("Open");
 
-                    b.Property<int?>("StockDataID");
+                    b.Property<int>("StockDataID");
 
                     b.Property<double?>("UClose");
 
@@ -74,7 +57,7 @@ namespace StockAPI.Migrations
 
                     b.Property<long?>("Volume");
 
-                    b.HasKey("Date");
+                    b.HasKey("ChartID");
 
                     b.HasIndex("StockDataID");
 
@@ -144,6 +127,8 @@ namespace StockAPI.Migrations
 
                     b.Property<string>("PrimaryExchange");
 
+                    b.Property<int>("StockDataID");
+
                     b.Property<long?>("Volume");
 
                     b.Property<double?>("Week52High");
@@ -154,6 +139,9 @@ namespace StockAPI.Migrations
 
                     b.HasKey("Symbol");
 
+                    b.HasIndex("StockDataID")
+                        .IsUnique();
+
                     b.ToTable("Quote");
                 });
 
@@ -163,27 +151,46 @@ namespace StockAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("QuoteSymbol");
-
                     b.HasKey("ID");
-
-                    b.HasIndex("QuoteSymbol");
 
                     b.ToTable("StockData");
                 });
 
-            modelBuilder.Entity("StockAPI.Models.Chart", b =>
+            modelBuilder.Entity("StockAPI.Models.User", b =>
                 {
-                    b.HasOne("StockAPI.Models.StockData")
-                        .WithMany("Chart")
-                        .HasForeignKey("StockDataID");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("LastName");
+
+                    b.Property<byte[]>("PasswordHash");
+
+                    b.Property<byte[]>("PasswordSalt");
+
+                    b.Property<string>("Username");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("StockAPI.Models.StockData", b =>
+            modelBuilder.Entity("StockAPI.Models.Chart", b =>
                 {
-                    b.HasOne("StockAPI.Models.Quote", "Quote")
-                        .WithMany()
-                        .HasForeignKey("QuoteSymbol");
+                    b.HasOne("StockAPI.Models.StockData", "StockData")
+                        .WithMany("Chart")
+                        .HasForeignKey("StockDataID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("StockAPI.Models.Quote", b =>
+                {
+                    b.HasOne("StockAPI.Models.StockData", "StockData")
+                        .WithOne("Quote")
+                        .HasForeignKey("StockAPI.Models.Quote", "StockDataID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

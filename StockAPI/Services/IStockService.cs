@@ -1,4 +1,5 @@
 ﻿using StockAPI.Models;
+using StockAPI.Models.ApiDataModels;
 using StockAPI.Services.Communication;
 using System;
 using System.Collections.Generic;
@@ -11,8 +12,9 @@ namespace StockAPI.Services
     {
         Task<IEnumerable<StockData>> ListAsync();
         Task<StockResponse> SaveAsync(StockData stockData);
-        Task<StockData> FindBySymbolOrCompanyNameAsync(string Symbol);
+        Task<StockData> FindBySymbolAsync(string Symbol);
         Task<StockResponse> DeleteAsync(string Symbol);
+        int CountOfStockData();
         bool IsDbEmpty();
         bool SpecificStockDataExists(string Symbol);
     }

@@ -11,22 +11,26 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using StockAPI.DTOs;
-using StockAPI.Entities;
 using StockAPI.Helpers;
+using StockAPI.Models.UserModels;
+using StockAPI.Resources;
 using StockAPI.Services;
 
 namespace StockAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
+    [Route("[controller]")]
     public class UsersController : ControllerBase
     {
         private IUserService _userService;
         private IMapper _mapper;
         private readonly AppSettings _appSettings;
 
-        public UsersController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings)
+        public UsersController(
+            IUserService userService,
+            IMapper mapper,
+            IOptions<AppSettings> appSettings)
         {
             _userService = userService;
             _mapper = mapper;
@@ -35,9 +39,9 @@ namespace StockAPI.Controllers
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        public IActionResult Authenticate([FromBody]UserDTO userDto)
+        public IActionResult Authenticate([FromBody]AuthenticateModel model)
         {
-            var user = _userService.Authenticate(userDto.Username, userDto.Password);
+            var user = _userService.Authenticate(model.Username, model.Password);
 
             if (user == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
@@ -56,7 +60,7 @@ namespace StockAPI.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
 
-            // return basic user info (without password) and token to store client side
+            // return basic user info and authentication token
             return Ok(new
             {
                 Id = user.Id,
@@ -69,15 +73,15 @@ namespace StockAPI.Controllers
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public IActionResult Register([FromBody]UserDTO userDto)
+        public IActionResult Register([FromBody]RegisterModel model)
         {
-            // map dto to entity
-            var user = _mapper.Map<User>(userDto);
+            // map model to entity
+            var user = _mapper.Map<User>(model);
 
             try
             {
-                // save 
-                _userService.Create(user, userDto.Password);
+                // create user
+                _userService.Create(user, model.Password);
                 return Ok();
             }
             catch (AppException ex)
@@ -91,29 +95,29 @@ namespace StockAPI.Controllers
         public IActionResult GetAll()
         {
             var users = _userService.GetAll();
-            var userDtos = _mapper.Map<IList<UserDTO>>(users);
-            return Ok(userDtos);
+            var model = _mapper.Map<IList<UserResource>>(users);
+            return Ok(model);
         }
 
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
             var user = _userService.GetById(id);
-            var userDto = _mapper.Map<UserDTO>(user);
-            return Ok(userDto);
+            var model = _mapper.Map<UserResource>(user);
+            return Ok(model);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody]UserDTO userDto)
+        public IActionResult Update(int id, [FromBody]UpdateModel model)
         {
-            // map dto to entity and set id
-            var user = _mapper.Map<User>(userDto);
+            // map model to entity and set id
+            var user = _mapper.Map<User>(model);
             user.Id = id;
 
             try
             {
-                // save 
-                _userService.Update(user, userDto.Password);
+                // update user 
+                _userService.Update(user, model.Password);
                 return Ok();
             }
             catch (AppException ex)

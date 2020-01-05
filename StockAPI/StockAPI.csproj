@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200105180834_CreateDB.cs" />
+    <Compile Remove="Migrations\20200105180834_CreateDB.Designer.cs" />
+    <Compile Remove="Migrations\20200105183637_CreateDatabase.cs" />
+    <Compile Remove="Migrations\20200105183637_CreateDatabase.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

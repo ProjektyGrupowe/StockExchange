@@ -1,4 +1,4 @@
-﻿using StockAPI.Entities;
+﻿using StockAPI.Models.UserModels;
 using StockAPI.Repositories;
 using StockAPI.Repositories.Domain;
 using StockAPI.Services.Communication;

@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using StockAPI.Models;
+using StockAPI.Models.ApiDataModels;
+using StockAPI.Models.UserModels;
 using StockAPI.Resources;
-using StockAPI.DTOs;
-using StockAPI.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +14,13 @@ namespace StockAPI.Mapping
         public ModelToResourceProfile()
         {
             CreateMap<StockData, StockResource>();
-            CreateMap<User, UserDTO>();
+            CreateMap<Quote, QuoteResource>();
+            CreateMap<QuoteResource, SaveQuoteResource>();
+            CreateMap<Chart, ChartResource>();
+            CreateMap<ChartResource, SaveChartResource>();
+            CreateMap<User, UserResource>();
+            CreateMap<RegisterModel, User>();
+            CreateMap<UpdateModel, User>();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using StockAPI.Models;
+﻿using StockAPI.Models.ApiDataModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +11,7 @@ namespace StockAPI.Repositories
         Task<IEnumerable<StockData>> ListAsync();
         Task AddAsync(StockData stockData);
         Task<StockData> FindBySymbolAsync(string Symbol);
+        int CountOfStockData();
         void Remove(StockData stockData);
         bool IsDbEmpty();
         bool SpecificStockDataExists(string Symbol);

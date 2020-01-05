@@ -1,4 +1,5 @@
 ﻿using StockAPI.Models;
+using StockAPI.Models.ApiDataModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

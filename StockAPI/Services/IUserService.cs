@@ -1,4 +1,4 @@
-﻿using StockAPI.Entities;
+﻿using StockAPI.Models.UserModels;
 using StockAPI.Services.Communication;
 using System.Collections.Generic;
 using System.Threading.Tasks;

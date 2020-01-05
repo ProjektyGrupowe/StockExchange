@@ -1,4 +1,4 @@
-﻿using StockAPI.Models;
+﻿using StockAPI.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;

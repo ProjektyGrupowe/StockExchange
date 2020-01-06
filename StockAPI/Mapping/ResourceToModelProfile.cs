@@ -17,6 +17,9 @@ namespace StockAPI.Mapping
             CreateMap<SaveQuoteResource, Quote>();
             CreateMap<SaveChartResource, Chart>();
             CreateMap<UserResource, User>();
+            CreateMap<Task<IList<UserResource>>, Task<IList<User>>>();
+            CreateMap<User, RegisterModel>();
+            CreateMap<User, UpdateModel>();
         }
     }
 }

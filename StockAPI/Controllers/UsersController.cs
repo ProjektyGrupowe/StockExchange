@@ -95,7 +95,7 @@ namespace StockAPI.Controllers
         public IActionResult GetAll()
         {
             var users = _userService.GetAll();
-            var model = _mapper.Map<IList<UserResource>>(users);
+            var model = _mapper.Map<IEnumerable<User>, IEnumerable<UserResource>>(users.Result);
             return Ok(model);
         }
 

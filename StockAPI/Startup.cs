@@ -42,6 +42,7 @@ namespace StockAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             services.AddMvc()
                     .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                     .AddJsonOptions(options => 
@@ -119,7 +120,15 @@ namespace StockAPI
                 app.UseHsts();
             }
 
+            app.UseCors(x => x
+               .AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader()
+               .AllowCredentials());
+
             app.UseHttpsRedirection();
+            app.UseAuthentication();
+
             app.UseMvc();
 
             app.UseExceptionHandler(a => a.Run(async context =>
@@ -137,13 +146,6 @@ namespace StockAPI
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "StockAPI V1");
             });
-
-            app.UseCors(x => x
-               .AllowAnyOrigin()
-               .AllowAnyMethod()
-               .AllowAnyHeader());
-
-            app.UseAuthentication();
         }
     }
 }

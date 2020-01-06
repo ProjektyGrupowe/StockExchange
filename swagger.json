@@ -1,0 +1,545 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "v1",
+    "title": "StockAPI"
+  },
+  "paths": {
+    "/api/Stocks": {
+      "get": {
+        "tags": [
+          "Stocks"
+        ],
+        "operationId": "GetStockQuoteData",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/StockResource"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Stocks"
+        ],
+        "operationId": "PostStockData",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "postData",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/PostData"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Stocks/{Symbol}": {
+      "get": {
+        "tags": [
+          "Stocks"
+        ],
+        "operationId": "GetStockQuoteData",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "Symbol",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Stocks/{symbol}": {
+      "delete": {
+        "tags": [
+          "Stocks"
+        ],
+        "operationId": "DeleteStockData",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "Symbol",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Users/authenticate": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Authenticate",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "model",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/AuthenticateModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Users/register": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Register",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "model",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/RegisterModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "GetAll",
+        "consumes": [],
+        "produces": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Users/{id}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "GetById",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Update",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "model",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/UpdateModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Delete",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "StockResource": {
+      "type": "object",
+      "properties": {
+        "quote": {
+          "$ref": "#/definitions/QuoteResource"
+        },
+        "chart": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ChartResource"
+          }
+        }
+      }
+    },
+    "QuoteResource": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "type": "string"
+        },
+        "companyName": {
+          "type": "string"
+        },
+        "primaryExchange": {
+          "type": "string"
+        },
+        "calculationPrice": {
+          "type": "string"
+        },
+        "open": {
+          "format": "double",
+          "type": "number"
+        },
+        "openTime": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "close": {
+          "format": "double",
+          "type": "number"
+        },
+        "closeTime": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "high": {
+          "format": "double",
+          "type": "number"
+        },
+        "low": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "latestPrice": {
+          "format": "double",
+          "type": "number"
+        },
+        "latestSource": {
+          "type": "string"
+        },
+        "latestTime": {
+          "type": "string"
+        },
+        "latestUpdate": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "latestVolume": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "delayedPrice": {
+          "format": "double",
+          "type": "number"
+        },
+        "delayedPriceTime": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "extendedPrice": {
+          "format": "double",
+          "type": "number"
+        },
+        "extendedChange": {
+          "format": "double",
+          "type": "number"
+        },
+        "extendedChangePercent": {
+          "format": "double",
+          "type": "number"
+        },
+        "extendedPriceTime": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "previousClose": {
+          "format": "double",
+          "type": "number"
+        },
+        "previousVolume": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "change": {
+          "format": "double",
+          "type": "number"
+        },
+        "changePercent": {
+          "format": "double",
+          "type": "number"
+        },
+        "volume": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "avgTotalVolume": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "marketCap": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "peRatio": {
+          "format": "double",
+          "type": "number"
+        },
+        "week52High": {
+          "format": "double",
+          "type": "number"
+        },
+        "week52Low": {
+          "format": "double",
+          "type": "number"
+        },
+        "ytdChange": {
+          "format": "double",
+          "type": "number"
+        },
+        "lastTradeTime": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "isUSMarketOpen": {
+          "type": "boolean"
+        }
+      }
+    },
+    "ChartResource": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "open": {
+          "format": "double",
+          "type": "number"
+        },
+        "close": {
+          "format": "double",
+          "type": "number"
+        },
+        "high": {
+          "format": "double",
+          "type": "number"
+        },
+        "low": {
+          "format": "double",
+          "type": "number"
+        },
+        "volume": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "uOpen": {
+          "format": "double",
+          "type": "number"
+        },
+        "uClose": {
+          "format": "double",
+          "type": "number"
+        },
+        "uHigh": {
+          "format": "double",
+          "type": "number"
+        },
+        "uLow": {
+          "format": "double",
+          "type": "number"
+        },
+        "uVolume": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "change": {
+          "format": "double",
+          "type": "number"
+        },
+        "changePercent": {
+          "format": "double",
+          "type": "number"
+        },
+        "label": {
+          "type": "string"
+        },
+        "changeOverTime": {
+          "format": "double",
+          "type": "number"
+        }
+      }
+    },
+    "PostData": {
+      "type": "object",
+      "properties": {
+        "Symbols": {
+          "type": "string"
+        }
+      }
+    },
+    "AuthenticateModel": {
+      "required": [
+        "username",
+        "password"
+      ],
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "RegisterModel": {
+      "required": [
+        "firstName",
+        "lastName",
+        "username",
+        "password"
+      ],
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdateModel": {
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

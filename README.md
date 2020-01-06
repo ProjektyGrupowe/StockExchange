@@ -50,7 +50,7 @@ git clone https://github.com/ProjektyGrupowe/StockExchange.git
 #### For Azure
 1. Go to
 ```sh
-https://stockAPI.azurewebsites.net/api/Stock
+https://stockapi2020.azurewebsites.net/api/Stock
 ```
 
 <!-- USAGE EXAMPLES -->

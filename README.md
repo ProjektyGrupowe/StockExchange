@@ -26,20 +26,11 @@ This project is a REST API, working with json as input and output and another AP
 To get a local copy up and running follow these simple steps:
 
 ### Prerequisites
-* Docker
 * IDE
+* Browser
 
 ### Installation
 
-#### For Docker
-1. Pull docker container
-```sh
-docker pull sirvius2122/stockAPI
-```
-2. Run container
-```sh
-docker exec -it <container name> <command>
-```
 
 #### For Local
 1. Clone the repo

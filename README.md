@@ -55,4 +55,4 @@ https://stockAPI.azurewebsites.net/api/Stock
 
 <!-- USAGE EXAMPLES -->
 ## Usage
-For usage examples please refer to the [Documentation](https://app.swaggerhub.com/apis-docs/lukaszszafranski/StockAPI/v1)
+For usage examples please refer to the [Documentation](https://app.swaggerhub.com/apis-docs/lukaszszafranski/stock-api/v1)

@@ -14,6 +14,7 @@ using StockAPI.Resources;
 using StockAPI.Models.ApiDataModels;
 using StockAPI.Models.PostDataModels;
 using System.Net;
+using Microsoft.Extensions.Logging;
 
 namespace StockAPI.Controllers
 {
@@ -75,71 +76,78 @@ namespace StockAPI.Controllers
 
             var symbolList = postData.Symbols.Split(new char[] { ',' }).ToList();
 
-            if (symbolList.Count == 1)
+            if (_stockService.SpecificStockDataExists(postData.Symbols))
             {
-                var httpClient = new HttpClient();
-                var URL = "https://cloud.iexapis.com/v1/stock/" + postData.Symbols + "/batch?" + "&types=quote,chart&range=1m&last=5";
-                var Token = "&token=pk_8936f153936f4ee3b77122727d80bead";
-
-                var response = await httpClient.GetStringAsync(URL + Token);
-                var stockResource = Newtonsoft.Json.JsonConvert.DeserializeObject<SaveStockResource>(response);
-                var stockData = _mapper.Map<SaveStockResource, StockData>(stockResource);
-
-                if (!_stockService.SpecificStockDataExists(stockData.Quote.Symbol) || !_stockService.SpecificStockDataExists(stockData.Quote.CompanyName))
-                {
-                    var result = _stockService.SaveAsync(stockData);
-
-                    if (!result.Result.Success)
-                    {
-                        return BadRequest(result.Result.Message);
-                    }
-
-                    var finalStockResource = _mapper.Map<StockData, StockResource>(result.Result.StockData);
-
-                    return Ok(finalStockResource);
-                }
-                else
-                {
-                    return Content("This Stock Data exists in database");
-                }
+                return Ok();
             }
-            else if (symbolList.Count > 1)
+            else if (!_stockService.SpecificStockDataExists(postData.Symbols))
             {
-
-                var listOfStockData = new List<StockData>();
-
-                foreach (var symbol in symbolList)
+                if (symbolList.Count == 1)
                 {
-                    if (!_stockService.SpecificStockDataExists(symbol))
+                    var httpClient = new HttpClient();
+                    var URL = "https://cloud.iexapis.com/v1/stock/" + postData.Symbols + "/batch?" + "&types=quote,chart&range=1m&last=5";
+                    var Token = "&token=pk_8936f153936f4ee3b77122727d80bead";
+
+                    var response = await httpClient.GetStringAsync(URL + Token);
+                    var stockResource = Newtonsoft.Json.JsonConvert.DeserializeObject<SaveStockResource>(response);
+                    var stockData = _mapper.Map<SaveStockResource, StockData>(stockResource);
+
+                    if (!_stockService.SpecificStockDataExists(stockData.Quote.Symbol) || !_stockService.SpecificStockDataExists(stockData.Quote.CompanyName))
                     {
-                        var httpClient = new HttpClient();
-                        var URL = "https://cloud.iexapis.com/v1/stock/" + postData.Symbols + "/batch?" + "&types=quote,chart&range=1m&last=5";
-                        var Token = "?token=pk_8936f153936f4ee3b77122727d80bead";
+                        var result = _stockService.SaveAsync(stockData);
 
-                        var response = await httpClient.GetStringAsync(URL + Token);
-                        var stockResource = Newtonsoft.Json.JsonConvert.DeserializeObject<SaveStockResource>(response);
-                        var stockData = _mapper.Map<SaveStockResource, StockData>(stockResource);
+                        if (!result.Result.Success)
+                        {
+                            return BadRequest(result.Result.Message);
+                        }
 
-                        listOfStockData.Add(stockData);
+                        var finalStockResource = _mapper.Map<StockData, StockResource>(result.Result.StockData);
+
+                        return Ok(finalStockResource);
                     }
                     else
                     {
-                        return Content("This Stock Data exist in database");
+                        return Content("This Stock Data exists in database");
                     }
                 }
-
-                foreach (var stockData in listOfStockData)
+                else if (symbolList.Count > 1)
                 {
-                    var result = _stockService.SaveAsync(stockData);
 
-                    if (!result.Result.Success)
+                    var listOfStockData = new List<StockData>();
+
+                    foreach (var symbol in symbolList)
                     {
-                        return BadRequest(result.Result.Message);
+                        if (!_stockService.SpecificStockDataExists(symbol))
+                        {
+                            var httpClient = new HttpClient();
+                            var URL = "https://cloud.iexapis.com/v1/stock/" + postData.Symbols + "/batch?" + "&types=quote,chart&range=1m&last=5";
+                            var Token = "?token=pk_8936f153936f4ee3b77122727d80bead";
+
+                            var response = await httpClient.GetStringAsync(URL + Token);
+                            var stockResource = Newtonsoft.Json.JsonConvert.DeserializeObject<SaveStockResource>(response);
+                            var stockData = _mapper.Map<SaveStockResource, StockData>(stockResource);
+
+                            listOfStockData.Add(stockData);
+                        }
+                        else
+                        {
+                            return Content("This Stock Data exist in database");
+                        }
                     }
 
-                    var finalStockResource = _mapper.Map<StockData, StockResource>(result.Result.StockData);
+                    foreach (var stockData in listOfStockData)
+                    {
+                        var result = _stockService.SaveAsync(stockData);
 
-                    return Ok(finalStockResource);
+                        if (!result.Result.Success)
+                        {
+                            return BadRequest(result.Result.Message);
+                        }
+
+                        var finalStockResource = _mapper.Map<StockData, StockResource>(result.Result.StockData);
+
+                        return Ok(finalStockResource);
+                    }
                 }
             }
 

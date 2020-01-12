@@ -1,12 +1,14 @@
-﻿import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
-import { AlertService, UserService, AuthenticationService } from '@/_services';
+import { AlertService } from '../services/alert.service';
+import { UserService } from '../services/user.service';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({ templateUrl: 'register.component.html' })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
     registerForm: FormGroup;
     loading = false;
     submitted = false;
@@ -25,12 +27,26 @@ export class RegisterComponent implements OnInit {
     }
 
     ngOnInit() {
+        var body = document.getElementsByTagName('body')[0];
+        body.classList.add('login-page');
+
+        var navbar = document.getElementsByTagName('nav')[0];
+        navbar.classList.add('navbar-transparent');
+
         this.registerForm = this.formBuilder.group({
             firstName: ['', Validators.required],
             lastName: ['', Validators.required],
             username: ['', Validators.required],
-            password: ['', [Validators.required, Validators.minLength(6)]]
+            password: ['', Validators.required]
         });
+    }
+
+    ngOnDestroy() {
+        var body = document.getElementsByTagName('body')[0];
+        body.classList.remove('login-page');
+        
+        var navbar = document.getElementsByTagName('nav')[0];
+        navbar.classList.remove('navbar-transparent');
     }
 
     // convenience getter for easy access to form fields

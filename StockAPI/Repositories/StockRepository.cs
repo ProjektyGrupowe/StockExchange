@@ -25,7 +25,7 @@ namespace StockAPI.Repositories
 
         public async Task<StockData> FindBySymbolAsync(string Symbol)
         {
-            var ID = _context.StockData.Select(s => s.ID).Single();
+            var ID = _context.StockData.Where(s => s.Quote.Symbol == Symbol).Select(s => s.ID).SingleOrDefault();
             var quote = _context.Quote.First(s => s.Symbol == Symbol);
             var chart = _context.Chart.Where(s => s.StockDataID == ID).ToList();
 

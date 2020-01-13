@@ -8,6 +8,7 @@ import { LoginComponent } from '../app/login/login.component';
 import { LandingComponent } from '../app/landing/landing.component';
 import { RegisterComponent } from '../app/register/register.component';
 import { AuthGuard } from '../app/helpers/auth.guard';
+import { NotFoundComponent } from '../app/notfound/notfound.component';
 
 
 const routes: Routes = [
@@ -37,8 +38,12 @@ const routes: Routes = [
     component: RegisterComponent
   },
   {
+    path: '404',
+    component: NotFoundComponent
+  },
+  {
     path: '**',
-    redirectTo: 'welcome'
+    redirectTo: '/404'
   }
 ];
 

@@ -1,4 +1,4 @@
-<div class="page-header" filter-color="orange">
+<div class="page-header">
     <div class="page-header-image" style="background-image:url(../../assets/img/login.jpg)"></div>
     <div class="container">
         <div class="col-md-4 content-center">
@@ -18,7 +18,7 @@
                             </div>
                         </div>
                         <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus1===true}">
-                            <input type="password" placeholder="Password" class="form-control" formControlName="password" (focus)="focus1=true" (blur)="focus1=false" [ngClass]="{ 'is-invalid': submitted && f.password.errors }"/>
+                            <input type="password" placeholder="Password" class="form-control" formControlName="password" (focus)="focus1=true" (blur)="focus1=false" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
                             <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
                                 <div *ngIf="f.password.errors.required">Password is required</div>
                             </div>

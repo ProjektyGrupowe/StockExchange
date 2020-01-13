@@ -1,0 +1,35 @@
+<div class="page-header">
+    <div class="page-header-image" style="background-image:url(../../assets/img/login.jpg)"></div>
+    <div class="container">
+        <div class="col-md-4 content-center">
+            <div class="card card-login card-plain">
+                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                    <div class="header header-primary text-center">
+                        <h1>404</h1>
+                    </div>
+                    <div class="content">
+                        <h2>We didn't found source you're requesting.</h2>
+                    </div>
+                    <div class="pull-center">
+                        <h6>
+                            <a routerLink="/welcome" class="link">GO BACK</a>
+                        </h6>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="container">
+            <nav>
+                <ul>
+                    <li>
+                        <a routerLink="/welcome">
+                            About Us
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
+</div>

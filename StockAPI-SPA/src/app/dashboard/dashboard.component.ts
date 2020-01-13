@@ -8,6 +8,8 @@ import { ApiService } from '../services/api.service';
 import { StockData } from '../models/StockData';
 import { Chart } from '../models/Chart';
 import { element } from 'protractor';
+import { NgxSpinnerService } from 'ngx-spinner';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -17,8 +19,20 @@ import { element } from 'protractor';
 export class DashboardComponent implements OnInit, AfterViewInit {
   currentUser: User;
   stockData: StockData[];
+  
+  //CHART VARIABLES
+  
   openDatas = [];
   dateDatas = [];
+  changePercentDatas = [];
+  changeOverTimeDatas = [];
+  volumeDatas = [];
+  changePerformanceDatas = [];
+  labelsDatas = [];
+
+  //COMPANY VARIABLES
+
+  quoteDatas = [];
 
   ChartOpenData: Array<any>;
   ChartDataTimeData: Array<any>;
@@ -74,7 +88,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
   }
 
-  constructor(private authenticationService: AuthenticationService, private userService: UserService, private route: ActivatedRoute, private apiService: ApiService) { 
+  constructor(private authenticationService: AuthenticationService, private userService: UserService, 
+    private route: ActivatedRoute, private apiService: ApiService, private spinner: NgxSpinnerService) { 
     this.currentUser = this.authenticationService.currentUserValue;
   }
 
@@ -84,12 +99,21 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     var companyName = this.route.snapshot.queryParamMap.get('Symbol');
 
+    this.spinner.show();
     this.apiService.GetStockBySymbol(companyName).subscribe((response: StockData[]) => {
       console.log(response);
+      
+      //CHART VARIABLES
       let openData = response['chart'].map(res => res.open);
       let dateData = response['chart'].map(res => res.date);
-      console.log(openData);
-      console.log(dateData);
+      let changeOverTimeData = response['chart'].map(res => res.changeOverTime);
+      let changePercentData = response['chart'].map(res => res.changePercent);
+      let changeData = response['chart'].map(res => res.change);
+      let labelsData = response['chart'].map(res => res.label);
+      
+      //COMPANY VARIABLES
+      let quoteData = response['quote'];
+      let quoteDataProperties = Object.values(quoteData);
 
       openData.forEach((res) => {
         this.openDatas.push(res);
@@ -100,8 +124,31 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         this.dateDatas.push(res);
       });
 
-      console.log(this.openDatas);
-      console.log(this.dateDatas);
+      changeOverTimeData.forEach((res) => {
+        this.changeOverTimeDatas.push(res);
+      });
+
+      changeData.forEach((res) => {
+        this.changePerformanceDatas.push(res);
+      });
+
+      changePercentData.forEach((res) => {
+        this.changePercentDatas.push(res);
+      });
+
+      labelsData.forEach((res) => {
+        this.labelsDatas.push(res);
+      });
+
+      for (let index = 0; index < quoteDataProperties.length; index++) {
+        this.quoteDatas.push(quoteDataProperties[index]); 
+      }
+
+      console.log(this.quoteDatas);
+
+      setTimeout(() => {
+        this.spinner.hide();
+      }, 5000);
     });
 
     this.chartColor = "#FFFFFF";
@@ -118,7 +165,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     this.lineBigDashboardChartData = [
         {
-          label: 'Data',
+          label: 'Open value',
 
           pointBorderWidth: 1,
           pointHoverRadius: 7,
@@ -312,14 +359,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     this.lineChartData = [
         {
-          label: "Active Users",
+          label: "Stock change over time",
           pointBorderWidth: 2,
           pointHoverRadius: 4,
           pointHoverBorderWidth: 1,
           pointRadius: 4,
           fill: true,
           borderWidth: 2,
-          data: [542, 480, 430, 550, 530, 453, 380, 434, 568, 610, 700, 630]
+          data: this.changeOverTimeDatas
         }
       ];
       this.lineChartColors = [
@@ -330,7 +377,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
          backgroundColor: this.gradientFill
        }
      ];
-    this.lineChartLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    this.lineChartLabels = this.labelsDatas;
     this.lineChartOptions = this.gradientChartOptionsConfiguration;
 
     this.lineChartType = 'line';
@@ -348,14 +395,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     this.lineChartWithNumbersAndGridData = [
         {
-          label: "Email Stats",
+          label: "Change",
            pointBorderWidth: 2,
            pointHoverRadius: 4,
            pointHoverBorderWidth: 1,
            pointRadius: 4,
            fill: true,
            borderWidth: 2,
-          data: [40, 500, 650, 700, 1200, 1250, 1300, 1900]
+          data: this.changePerformanceDatas
         }
       ];
       this.lineChartWithNumbersAndGridColors = [
@@ -366,7 +413,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
          backgroundColor: this.gradientFill
        }
      ];
-    this.lineChartWithNumbersAndGridLabels = ["12pm,", "3pm", "6pm", "9pm", "12am", "3am", "6am", "9am"];
+    this.lineChartWithNumbersAndGridLabels = this.labelsDatas;
     this.lineChartWithNumbersAndGridOptions = this.gradientChartOptionsConfigurationWithNumbersAndGrid;
 
     this.lineChartWithNumbersAndGridType = 'line';
@@ -384,14 +431,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     this.lineChartGradientsNumbersData = [
         {
-          label: "Active Countries",
+          label: "Percent change in stock value",
           pointBorderWidth: 2,
           pointHoverRadius: 4,
           pointHoverBorderWidth: 1,
           pointRadius: 4,
           fill: true,
           borderWidth: 1,
-          data: [80, 99, 86, 96, 123, 85, 100, 75, 88, 90, 123, 155]
+          data: this.changePerformanceDatas
         }
       ];
     this.lineChartGradientsNumbersColors = [
@@ -402,7 +449,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
        pointBackgroundColor: "#2CA8FF",
      }
    ];
-    this.lineChartGradientsNumbersLabels = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    this.lineChartGradientsNumbersLabels = this.labelsDatas;
     this.lineChartGradientsNumbersOptions = {
         maintainAspectRatio: false,
         legend: {
@@ -447,15 +494,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           }
         }
       }
-
     this.lineChartGradientsNumbersType = 'bar';
-    
-    function addData(chart, label, data) {
-      chart.data.labels.push(label);
-      chart.data.datasets.forEach((dataset) => {
-          dataset.data.push(data);
-      });
-      chart.update();
-    }
   }
 }

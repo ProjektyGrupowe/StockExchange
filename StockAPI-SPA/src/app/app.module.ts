@@ -5,6 +5,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrModule } from 'ngx-toastr';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 import { AppRoutingModule } from './app.routing';
 import { ComponentsModule } from './components/components.module';
@@ -19,6 +20,7 @@ import { UserBackendInterceptor } from '../app/helpers/userbackend.interceptor';
 import { JwtInterceptor } from '../app/helpers/jwt.interceptor';
 import { ErrorInterceptor } from '../app/helpers/error.interceptor';
 import { AlertComponent } from '../app/components/alerts/alert.component';
+import { NotFoundComponent } from '../app/notfound/notfound.component';
 
 
 @NgModule({
@@ -32,6 +34,7 @@ import { AlertComponent } from '../app/components/alerts/alert.component';
     AppRoutingModule,
     NgbModule,
     ToastrModule.forRoot(),
+    NgxSpinnerModule
   ],
   declarations: [
     AppComponent,
@@ -39,7 +42,8 @@ import { AlertComponent } from '../app/components/alerts/alert.component';
     LoginComponent,
     LandingComponent,
     RegisterComponent,
-    AlertComponent
+    AlertComponent,
+    NotFoundComponent
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

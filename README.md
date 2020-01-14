@@ -51,3 +51,6 @@ https://stockapi2020v2.azurewebsites.net/api/Stocks
 <!-- USAGE EXAMPLES -->
 ## Usage
 For usage examples please refer to the [Documentation v1](https://app.swaggerhub.com/apis-docs/lukaszszafranski/stock-api/v1) or [Live Documentation in API](https://stockapi2020v2.azurewebsites.net/swagger/index.html)
+
+## TRELLO BOARD
+[Trello](https://trello.com/b/urwhTkAJ/aspnet)

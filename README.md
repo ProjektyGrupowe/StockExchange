@@ -54,3 +54,6 @@ For usage examples please refer to the [Documentation v1](https://app.swaggerhub
 
 ## Trello Board
 [Trello](https://trello.com/b/urwhTkAJ/aspnet)
+
+## WWW
+[Website](https://stockanalytics2020.azurewebsites.net)

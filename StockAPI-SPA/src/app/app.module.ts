@@ -48,7 +48,6 @@ import { NotFoundComponent } from '../app/notfound/notfound.component';
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
-    { provide: HTTP_INTERCEPTORS, useClass: UserBackendInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]
 })

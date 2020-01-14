@@ -9,12 +9,11 @@ import { map, catchError } from 'rxjs/operators';
 })
 
 export class ApiService {
-  apiURL = environment.apiUrl;
 
   constructor(private httpClient: HttpClient) {}
 
   public GetStockBySymbol(symbols: string) {
-    return this.httpClient.get<any[]>(`${this.apiURL}/api/Stocks/${symbols}`).pipe(map(response => {
+    return this.httpClient.get<any[]>(`${environment.apiUrl}/api/Stocks/${symbols}`).pipe(map(response => {
       return response;
     }));
   }
@@ -27,7 +26,7 @@ export class ApiService {
       symbols
     }
 
-    return this.httpClient.post(`${this.apiURL}/api/Stocks`, body, { headers: headers }).pipe(map(response => {
+    return this.httpClient.post(`${environment.apiUrl}/api/Stocks`, body, { headers: headers }).pipe(map(response => {
       return response;
     },
     catchError(err => of([]))));

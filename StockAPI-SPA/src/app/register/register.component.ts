@@ -6,6 +6,7 @@ import { first } from 'rxjs/operators';
 import { AlertService } from '../services/alert.service';
 import { UserService } from '../services/user.service';
 import { AuthenticationService } from '../services/authentication.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({ templateUrl: 'register.component.html' })
 export class RegisterComponent implements OnInit, OnDestroy {
@@ -18,11 +19,12 @@ export class RegisterComponent implements OnInit, OnDestroy {
         private router: Router,
         private authenticationService: AuthenticationService,
         private userService: UserService,
-        private alertService: AlertService
+        private alertService: AlertService,
+        private spinner: NgxSpinnerService
     ) {
         // redirect to home if already logged in
         if (this.authenticationService.currentUserValue) {
-            this.router.navigate(['/']);
+            this.router.navigate(['/input']);
         }
     }
 
@@ -53,6 +55,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     get f() { return this.registerForm.controls; }
 
     onSubmit() {
+        this.spinner.show();
         this.submitted = true;
 
         // reset alerts on submit
@@ -69,6 +72,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
             .subscribe(
                 data => {
                     this.alertService.success('Registration successful', true);
+                    setTimeout(() => {
+                        this.spinner.hide();
+                    }, 5000);
                     this.router.navigate(['/login']);
                 },
                 error => {

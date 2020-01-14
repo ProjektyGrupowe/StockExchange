@@ -6,6 +6,8 @@ import { first } from 'rxjs/operators';
 import { AlertService } from '../services/alert.service';
 import { AuthenticationService } from '../services/authentication.service';
 
+import { NgxSpinnerService } from 'ngx-spinner';
+
 @Component({ templateUrl: 'login.component.html' })
 export class LoginComponent implements OnInit, OnDestroy {
     loginForm: FormGroup;
@@ -17,7 +19,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private router: Router,
         private authenticationService: AuthenticationService,
-        private alertService: AlertService
+        private alertService: AlertService,
+        private spinner: NgxSpinnerService
     ) {
         // redirect to home if already logged in
         if (this.authenticationService.currentUserValue) {

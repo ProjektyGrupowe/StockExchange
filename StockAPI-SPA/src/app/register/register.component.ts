@@ -72,14 +72,14 @@ export class RegisterComponent implements OnInit, OnDestroy {
             .subscribe(
                 data => {
                     this.alertService.success('Registration successful', true);
-                    setTimeout(() => {
-                        this.spinner.hide();
-                    }, 5000);
                     this.router.navigate(['/login']);
                 },
                 error => {
                     this.alertService.error(error);
                     this.loading = false;
                 });
+                setTimeout(() => {
+                    this.spinner.hide();
+                }, 5000);
     }
 }

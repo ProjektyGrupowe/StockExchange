@@ -37,7 +37,7 @@ To get a local copy up and running follow these simple steps:
 
 
 #### For Local
-1. Clone the repository
+1. Clone the repo
 ```sh
 git clone https://github.com/ProjektyGrupowe/StockExchange.git
 ```
